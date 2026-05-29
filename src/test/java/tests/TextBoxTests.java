@@ -35,6 +35,7 @@ public class TextBoxTests extends TestBase {
         $("[id=submit]").click();
 
 
+
         $("#userEmail").shouldHave(cssClass("field-error"));
     }
 }

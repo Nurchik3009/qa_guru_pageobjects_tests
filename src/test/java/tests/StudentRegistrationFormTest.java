@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selenide.*;
 public class StudentRegistrationFormTest extends TestBase{
     @Test
     void successfulFillFormTest() {
+
         open("/automation-practice-form");
 
         $("[id=firstName]").setValue("Ainur");
