@@ -3,10 +3,11 @@ package tests;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 
-public class StudentRegistrationFormTest extends TestBase{
+public class StudentRegistrationFormTest extends TestBase {
     @Test
     void successfulFillFormTest() {
 
@@ -16,7 +17,7 @@ public class StudentRegistrationFormTest extends TestBase{
         $("[id=lastName]").setValue("Kaliakbarova");
         $("[id=userEmail]").setValue("Ainur@gmail.com");
 
-        $("#genterWrapper").$$("label").findBy(text("Female")).click();
+        $("#genterWrapper").$(byText("Female")).click();
 
         $("[id=userNumber]").setValue("7018880808");
 
@@ -38,10 +39,12 @@ public class StudentRegistrationFormTest extends TestBase{
 
 
         executeJavaScript("""
-    document.getElementById('fixedban')?.remove();
-    document.querySelector('footer')?.remove();
-""");
-        $("#submit").scrollIntoView(true).click();
+                    document.getElementById('fixedban')?.remove();
+                    document.querySelector('footer')?.remove();
+                """);
+        $("#submit").scrollIntoView(true);
+
+        executeJavaScript("arguments[0].click();", $("#submit"));
 
         //sleep(5000);
 
@@ -60,6 +63,7 @@ public class StudentRegistrationFormTest extends TestBase{
         $(".table-responsive").shouldHave(text("NCR Delhi"));
 
     }
+
     @Test
     void submitFormWithRequiredFieldsOnlyTest() {
         open("/automation-practice-form");
@@ -67,7 +71,7 @@ public class StudentRegistrationFormTest extends TestBase{
         $("[id=firstName]").setValue("Ainur");
         $("[id=lastName]").setValue("Kaliakbarova");
 
-        $("#genterWrapper").$$("label").findBy(text("Female")).click();
+        $("#genterWrapper").$(byText("Female")).click();
 
         $("[id=userNumber]").setValue("7018880808");
 
@@ -101,7 +105,7 @@ public class StudentRegistrationFormTest extends TestBase{
         open("/automation-practice-form");
 
         $("#lastName").setValue("Kaliakbarova");
-        $("#genterWrapper").$$("label").findBy(text("Female")).click();
+        $("#genterWrapper").$(byText("Female")).click();
         $("#userNumber").setValue("7018880808");
 
         $("#submit").scrollIntoView(true);
@@ -132,7 +136,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $("#firstName").setValue("Ainur");
         $("#lastName").setValue("Kaliakbarova");
-        $("#genterWrapper").$$("label").findBy(text("Female")).click();
+        $("#genterWrapper").$(byText("Female")).click();
         $("#userNumber").setValue("12345");
 
         $("#submit").scrollIntoView(true);
@@ -140,6 +144,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $(".modal-content").shouldNot(appear);
     }
+
     @Test
     void invalidEmailNegativeTest() {
         open("/automation-practice-form");
