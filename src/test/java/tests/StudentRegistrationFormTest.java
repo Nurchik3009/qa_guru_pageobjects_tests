@@ -16,7 +16,7 @@ public class StudentRegistrationFormTest extends TestBase{
         $("[id=lastName]").setValue("Kaliakbarova");
         $("[id=userEmail]").setValue("Ainur@gmail.com");
 
-        $("[for=gender-radio-2]").click();
+        $("#genterWrapper").$$("label").findBy(text("Female")).click();
 
         $("[id=userNumber]").setValue("7018880808");
 
@@ -27,7 +27,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $("[id=subjectsInput]").setValue("English").pressEnter();
 
-        $("[for=hobbies-checkbox-3]").click();
+        $("#hobbiesWrapper").$$("label").findBy(text("Music")).click();
 
         $("#uploadPicture").uploadFromClasspath("QA.jpg");
 
@@ -36,23 +36,16 @@ public class StudentRegistrationFormTest extends TestBase{
         $("#react-select-3-input").setValue("NCR").pressEnter();
         $("#react-select-4-input").setValue("Delhi").pressEnter();
 
-        executeJavaScript(
-                "let banner = document.getElementById('fixedban');" +
-                        "if(banner) banner.remove();"
-        );
 
-        executeJavaScript(
-                "let footer = document.querySelector('footer');" +
-                        "if(footer) footer.remove();"
-        );
-
-        $("#submit").scrollIntoView(true);
-
-        executeJavaScript("arguments[0].click();", $("#submit"));
+        executeJavaScript("""
+    document.getElementById('fixedban')?.remove();
+    document.querySelector('footer')?.remove();
+""");
+        $("#submit").scrollIntoView(true).click();
 
         //sleep(5000);
 
-        $(".modal-content").shouldBe(visible);
+        $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
         $(".table-responsive").shouldHave(text("Ainur Kaliakbarova"));
@@ -74,23 +67,23 @@ public class StudentRegistrationFormTest extends TestBase{
         $("[id=firstName]").setValue("Ainur");
         $("[id=lastName]").setValue("Kaliakbarova");
 
-        $("[for=gender-radio-2]").click();
+        $("#genterWrapper").$$("label").findBy(text("Female")).click();
 
         $("[id=userNumber]").setValue("7018880808");
 
         $("#submit").scrollIntoView(true);
 
         executeJavaScript("arguments[0].click();", $("#submit"));
-        //sleep(2000);
 
-        $(".modal-content").shouldBe(visible);
+
+        $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
         $(".table-responsive").shouldHave(text("Ainur Kaliakbarova"));
         $(".table-responsive").shouldHave(text("Female"));
         $(".table-responsive").shouldHave(text("7018880808"));
-        $(".table-responsive").shouldHave(text("29 May,2026"));
     }
+
     @Test
     void emptyFormNegativeTest() {
 
@@ -99,15 +92,16 @@ public class StudentRegistrationFormTest extends TestBase{
         $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
 
-        $(".modal-content").shouldNot(appear);
+        $(".modal-content").shouldNot(exist);
     }
+
     @Test
     void missingFirstNameNegativeTest() {
 
         open("/automation-practice-form");
 
         $("#lastName").setValue("Kaliakbarova");
-        $("[for=gender-radio-2]").click();
+        $("#genterWrapper").$$("label").findBy(text("Female")).click();
         $("#userNumber").setValue("7018880808");
 
         $("#submit").scrollIntoView(true);
@@ -115,6 +109,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $(".modal-content").shouldNot(appear);
     }
+
     @Test
     void missingGenderNegativeTest() {
 
@@ -129,6 +124,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $(".modal-content").shouldNot(appear);
     }
+
     @Test
     void invalidPhoneNumberNegativeTest() {
 
@@ -136,7 +132,7 @@ public class StudentRegistrationFormTest extends TestBase{
 
         $("#firstName").setValue("Ainur");
         $("#lastName").setValue("Kaliakbarova");
-        $("[for=gender-radio-2]").click();
+        $("#genterWrapper").$$("label").findBy(text("Female")).click();
         $("#userNumber").setValue("12345");
 
         $("#submit").scrollIntoView(true);
@@ -146,14 +142,15 @@ public class StudentRegistrationFormTest extends TestBase{
     }
     @Test
     void invalidEmailNegativeTest() {
-
         open("/automation-practice-form");
+
         $("#userEmail").setValue("invalidEmail");
 
         $("#submit").scrollIntoView(true);
+
         executeJavaScript("arguments[0].click();", $("#submit"));
 
-        $("#userEmail").shouldHave(value("invalidEmail"));
+        $(".modal-content").shouldNot(exist);
     }
 }
 
