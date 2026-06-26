@@ -5,92 +5,90 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-
+import static testdata.TestData.*;
 
 public class StudentRegistrationFormTest extends TestBase {
+
     @Test
     void successfulFillFormTest() {
-
         open("/automation-practice-form");
-
-        $("[id=firstName]").setValue("Ainur");
-        $("[id=lastName]").setValue("Kaliakbarova");
-        $("[id=userEmail]").setValue("Ainur@gmail.com");
-
-        $("#genterWrapper").$(byText("Female")).click();
-
-        $("[id=userNumber]").setValue("7018880808");
-
-        $("[id=dateOfBirthInput]").click();
-        $(".react-datepicker__year-select").selectOption("1986");
-        $(".react-datepicker__month-select").selectOption("September");
-        $(".react-datepicker__day--029").click();
-
-        $("[id=subjectsInput]").setValue("English").pressEnter();
-
-        $("#hobbiesWrapper").$$("label").findBy(text("Music")).click();
-
-        $("#uploadPicture").uploadFromClasspath("QA.jpg");
-
-        $("[id=currentAddress]").setValue("Abaya 130");
-
-        $("#react-select-3-input").setValue("NCR").pressEnter();
-        $("#react-select-4-input").setValue("Delhi").pressEnter();
-
 
         executeJavaScript("""
                     document.getElementById('fixedban')?.remove();
                     document.querySelector('footer')?.remove();
                 """);
-        $("#submit").scrollIntoView(true);
 
+        $("[id=firstName]").setValue(studentFirstName);
+        $("[id=lastName]").setValue(studentLastName);
+        $("[id=userEmail]").setValue(studentEmail);
+
+        $("#genterWrapper").$(byText(studentGender)).click();
+
+        $("[id=userNumber]").setValue(studentPhone);
+
+        $("[id=dateOfBirthInput]").click();
+        $(".react-datepicker__year-select").selectOption(studentBirthYear);
+        $(".react-datepicker__month-select").selectOption(studentBirthMonth);
+
+        String dayClass = String.format(".react-datepicker__day--0%s", studentBirthDay);
+        $(dayClass).click();
+
+        $("[id=subjectsInput]").setValue(studentSubject).pressEnter();
+
+        $("#hobbiesWrapper").$$("label").findBy(text(studentHobby)).click();
+
+        $("#uploadPicture").uploadFromClasspath(studentPicture);
+
+        $("[id=currentAddress]").setValue(studentAddress);
+
+        $("#react-select-3-input").setValue(studentState).pressEnter();
+        $("#react-select-4-input").setValue(studentCity).pressEnter();
+
+        $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
 
-        //sleep(5000);
 
         $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
-        $(".table-responsive").shouldHave(text("Ainur Kaliakbarova"));
-        $(".table-responsive").shouldHave(text("Ainur@gmail.com"));
-        $(".table-responsive").shouldHave(text("Female"));
-        $(".table-responsive").shouldHave(text("7018880808"));
-        $(".table-responsive").shouldHave(text("29 September,1986"));
-        $(".table-responsive").shouldHave(text("English"));
-        $(".table-responsive").shouldHave(text("Music"));
-        $(".table-responsive").shouldHave(text("QA.jpg"));
-        $(".table-responsive").shouldHave(text("Abaya 130"));
-        $(".table-responsive").shouldHave(text("NCR Delhi"));
-
+        $(".table-responsive").shouldHave(
+                text(studentFirstName + " " + studentLastName),
+                text(studentEmail),
+                text(studentGender),
+                text(studentPhone),
+                text(studentBirthDay + " " + studentBirthMonth + "," + studentBirthYear),
+                text(studentSubject),
+                text(studentHobby),
+                text(studentPicture),
+                text(studentAddress),
+                text(studentState + " " + studentCity)
+        );
     }
 
     @Test
     void submitFormWithRequiredFieldsOnlyTest() {
         open("/automation-practice-form");
 
-        $("[id=firstName]").setValue("Ainur");
-        $("[id=lastName]").setValue("Kaliakbarova");
-
-        $("#genterWrapper").$(byText("Female")).click();
-
-        $("[id=userNumber]").setValue("7018880808");
+        $("[id=firstName]").setValue(studentFirstName);
+        $("[id=lastName]").setValue(studentLastName);
+        $("#genterWrapper").$(byText(studentGender)).click();
+        $("[id=userNumber]").setValue(studentPhone);
 
         $("#submit").scrollIntoView(true);
-
         executeJavaScript("arguments[0].click();", $("#submit"));
-
 
         $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
-        $(".table-responsive").shouldHave(text("Ainur Kaliakbarova"));
-        $(".table-responsive").shouldHave(text("Female"));
-        $(".table-responsive").shouldHave(text("7018880808"));
+        $(".table-responsive").shouldHave(
+                text(studentFirstName + " " + studentLastName),
+                text(studentGender),
+                text(studentPhone)
+        );
     }
 
     @Test
     void emptyFormNegativeTest() {
-
         open("/automation-practice-form");
 
         $("#submit").scrollIntoView(true);
@@ -101,12 +99,11 @@ public class StudentRegistrationFormTest extends TestBase {
 
     @Test
     void missingFirstNameNegativeTest() {
-
         open("/automation-practice-form");
 
-        $("#lastName").setValue("Kaliakbarova");
-        $("#genterWrapper").$(byText("Female")).click();
-        $("#userNumber").setValue("7018880808");
+        $("#lastName").setValue(studentLastName);
+        $("#genterWrapper").$(byText(studentGender)).click();
+        $("#userNumber").setValue(studentPhone);
 
         $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
@@ -116,12 +113,11 @@ public class StudentRegistrationFormTest extends TestBase {
 
     @Test
     void missingGenderNegativeTest() {
-
         open("/automation-practice-form");
 
-        $("#firstName").setValue("Ainur");
-        $("#lastName").setValue("Kaliakbarova");
-        $("#userNumber").setValue("7018880808");
+        $("#firstName").setValue(studentFirstName);
+        $("#lastName").setValue(studentLastName);
+        $("#userNumber").setValue(studentPhone);
 
         $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
@@ -131,13 +127,12 @@ public class StudentRegistrationFormTest extends TestBase {
 
     @Test
     void invalidPhoneNumberNegativeTest() {
-
         open("/automation-practice-form");
 
-        $("#firstName").setValue("Ainur");
-        $("#lastName").setValue("Kaliakbarova");
-        $("#genterWrapper").$(byText("Female")).click();
-        $("#userNumber").setValue("12345");
+        $("#firstName").setValue(studentFirstName);
+        $("#lastName").setValue(studentLastName);
+        $("#genterWrapper").$(byText(studentGender)).click();
+        $("#userNumber").setValue(invalidPhone);
 
         $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
@@ -149,13 +144,11 @@ public class StudentRegistrationFormTest extends TestBase {
     void invalidEmailNegativeTest() {
         open("/automation-practice-form");
 
-        $("#userEmail").setValue("invalidEmail");
+        $("#userEmail").setValue(invalidEmail);
 
         $("#submit").scrollIntoView(true);
-
         executeJavaScript("arguments[0].click();", $("#submit"));
 
         $(".modal-content").shouldNot(exist);
     }
 }
-
