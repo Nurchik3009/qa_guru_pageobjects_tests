@@ -8,26 +8,8 @@ import static testdata.TestData.*;
 
 public class TextBoxTests extends TestBase {
 
-    //    String userName;
-//    String userEmail;
-//    String currentAddress;
-//    String permanentAddress;
-//
-//    @BeforeEach
-//    public void setup() {
-
-    /// /        userName = getRandomString(10);
-//        userName = "Alex Black";
-//        userEmail = "alex@black.com";
-//        currentAddress = "first address 1";
-//        permanentAddress = "second address 2";
-//    }
     @Test
     void successfulFillFormTest() {
-//        String userName = "Alex Black";
-//        String userEmail = "alex@black.com";
-//        String currentAddress = "first address 1";
-//        String permanentAddress = "second address 2";
 
         open("/text-box");
         $("[id=userName]").setValue(userName);
@@ -44,8 +26,6 @@ public class TextBoxTests extends TestBase {
 
     @Test
     void successfulFillFormWithoutAddressTest() {
-//        String userName = "Alex Black";
-//        String userEmail = "alex@black.com";
 
         open("/text-box");
         $("[id=userName]").setValue(userName);

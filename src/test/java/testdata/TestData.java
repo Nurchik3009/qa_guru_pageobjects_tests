@@ -7,12 +7,6 @@ public class TestData {
     public static String currentAddress = "first address 1";
     public static String permanentAddress = "second address 2";
 
-    //    public static String
-    //            userName = "Alex Black",
-    //            userEmail = "alex@black.com",
-    //            currentAddress = "first address 1",
-    //            permanentAddress = "second address 2";
-
     // Данные для StudentRegistrationFormTest
     public static String studentFirstName = "Ainur";
     public static String studentLastName = "Kaliakbarova";

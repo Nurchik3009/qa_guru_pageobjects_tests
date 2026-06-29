@@ -35,7 +35,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         $("[id=subjectsInput]").setValue(studentSubject).pressEnter();
 
-        $("#hobbiesWrapper").$$("label").findBy(text(studentHobby)).click();
+        $("#hobbiesWrapper").$(byText(studentHobby)).click();
 
         $("#uploadPicture").uploadFromClasspath(studentPicture);
 
@@ -47,22 +47,19 @@ public class StudentRegistrationFormTest extends TestBase {
         $("#submit").scrollIntoView(true);
         executeJavaScript("arguments[0].click();", $("#submit"));
 
-
         $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
-        $(".table-responsive").shouldHave(
-                text(studentFirstName + " " + studentLastName),
-                text(studentEmail),
-                text(studentGender),
-                text(studentPhone),
-                text(studentBirthDay + " " + studentBirthMonth + "," + studentBirthYear),
-                text(studentSubject),
-                text(studentHobby),
-                text(studentPicture),
-                text(studentAddress),
-                text(studentState + " " + studentCity)
-        );
+        $(".table-responsive").shouldHave(text(studentFirstName + " " + studentLastName));
+        $(".table-responsive").shouldHave(text(studentEmail));
+        $(".table-responsive").shouldHave(text(studentGender));
+        $(".table-responsive").shouldHave(text(studentPhone));
+        $(".table-responsive").shouldHave(text(studentBirthDay + " " + studentBirthMonth + "," + studentBirthYear));
+        $(".table-responsive").shouldHave(text(studentSubject));
+        $(".table-responsive").shouldHave(text(studentHobby));
+        $(".table-responsive").shouldHave(text(studentPicture));
+        $(".table-responsive").shouldHave(text(studentAddress));
+        $(".table-responsive").shouldHave(text(studentState + " " + studentCity));
     }
 
     @Test
@@ -80,11 +77,9 @@ public class StudentRegistrationFormTest extends TestBase {
         $(".modal-content").should(appear);
         $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
 
-        $(".table-responsive").shouldHave(
-                text(studentFirstName + " " + studentLastName),
-                text(studentGender),
-                text(studentPhone)
-        );
+        $(".table-responsive").shouldHave(text(studentFirstName + " " + studentLastName));
+        $(".table-responsive").shouldHave(text(studentGender));
+        $(".table-responsive").shouldHave(text(studentPhone));
     }
 
     @Test
