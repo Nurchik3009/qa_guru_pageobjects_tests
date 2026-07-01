@@ -11,6 +11,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeFirstName(studentFirstName)
                 .typeLastName(studentLastName)
                 .typeEmail(studentEmail)
@@ -42,6 +43,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeFirstName(studentFirstName)
                 .typeLastName(studentLastName)
                 .setGender(studentGender)
@@ -58,6 +60,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .submit();
     }
 
@@ -66,6 +69,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeLastName(studentLastName)
                 .setGender(studentGender)
                 .typePhoneNumber(studentPhone)
@@ -77,6 +81,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeFirstName(studentFirstName)
                 .typeLastName(studentLastName)
                 .typePhoneNumber(studentPhone)
@@ -88,6 +93,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeFirstName(studentFirstName)
                 .typeLastName(studentLastName)
                 .setGender(studentGender)
@@ -100,6 +106,7 @@ public class StudentRegistrationFormTest extends TestBase {
 
         registrationPage
                 .openPage()
+                .removeBanners()
                 .typeEmail(invalidEmail)
                 .submit();
     }
