@@ -2,8 +2,6 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
 import static testdata.TestData.*;
 
 public class TextBoxTests extends TestBase {
@@ -11,28 +9,48 @@ public class TextBoxTests extends TestBase {
     @Test
     void successfulFillFormTest() {
 
-        open("/text-box");
-        $("[id=userName]").setValue(userName);
-        $("[id=userEmail]").setValue(userEmail);
-        $("[id=currentAddress]").setValue(currentAddress);
-        $("[id=permanentAddress]").setValue(permanentAddress);
-        $("[id=submit]").click();
-
-        $("[id=output] [id=name]").shouldHave(text(userName));
-        $("[id=output] [id=email]").shouldHave(text(userEmail));
-        $("[id=output] [id=currentAddress]").shouldHave(text(currentAddress));
-        $("[id=output] [id=permanentAddress]").shouldHave(text(permanentAddress));
+        textBoxPage
+                .openPage()
+                .typeUserName(userName)
+                .typeUserEmail(userEmail)
+                .typeCurrentAddress(currentAddress)
+                .typePermanentAddress(permanentAddress)
+                .submitForm()
+                .checkField("name", userName)
+                .checkField("email", userEmail)
+                .checkField("currentAddress", currentAddress)
+                .checkField("permanentAddress", permanentAddress);
     }
 
     @Test
     void successfulFillFormWithoutAddressTest() {
 
-        open("/text-box");
-        $("[id=userName]").setValue(userName);
-        $("[id=userEmail]").setValue(userEmail);
-        $("[id=submit]").click();
+        textBoxPage
+                .openPage()
+                .typeUserName(userName)
+                .typeUserEmail(userEmail)
+                .submitForm()
+                .checkField("name", userName)
+                .checkField("email", userEmail);
+    }
 
-        $("[id=output] [id=name]").shouldHave(text(userName));
-        $("[id=output] [id=email]").shouldHave(text(userEmail));
+    @Test
+    void successfulFillFormWithoutAddressTest_chaining() {
+
+        textBoxPage
+                .openPage()
+                .typeUserName(userName)
+                .typeUserEmail(userEmail)
+                .submitForm()
+                .checkField("name", userName)
+                .checkField("email", userEmail);
+    }
+
+    @Test
+    void emptyFormTest() {
+
+        textBoxPage
+                .openPage()
+                .submitForm();
     }
 }

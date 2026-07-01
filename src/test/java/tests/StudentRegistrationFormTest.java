@@ -2,148 +2,105 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
 import static testdata.TestData.*;
 
 public class StudentRegistrationFormTest extends TestBase {
 
     @Test
     void successfulFillFormTest() {
-        open("/automation-practice-form");
 
-        executeJavaScript("""
-                    document.getElementById('fixedban')?.remove();
-                    document.querySelector('footer')?.remove();
-                """);
-
-        $("[id=firstName]").setValue(studentFirstName);
-        $("[id=lastName]").setValue(studentLastName);
-        $("[id=userEmail]").setValue(studentEmail);
-
-        $("#genterWrapper").$(byText(studentGender)).click();
-
-        $("[id=userNumber]").setValue(studentPhone);
-
-        $("[id=dateOfBirthInput]").click();
-        $(".react-datepicker__year-select").selectOption(studentBirthYear);
-        $(".react-datepicker__month-select").selectOption(studentBirthMonth);
-
-        String dayClass = String.format(".react-datepicker__day--0%s", studentBirthDay);
-        $(dayClass).click();
-
-        $("[id=subjectsInput]").setValue(studentSubject).pressEnter();
-
-        $("#hobbiesWrapper").$(byText(studentHobby)).click();
-
-        $("#uploadPicture").uploadFromClasspath(studentPicture);
-
-        $("[id=currentAddress]").setValue(studentAddress);
-
-        $("#react-select-3-input").setValue(studentState).pressEnter();
-        $("#react-select-4-input").setValue(studentCity).pressEnter();
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").should(appear);
-        $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
-
-        $(".table-responsive").shouldHave(text(studentFirstName + " " + studentLastName));
-        $(".table-responsive").shouldHave(text(studentEmail));
-        $(".table-responsive").shouldHave(text(studentGender));
-        $(".table-responsive").shouldHave(text(studentPhone));
-        $(".table-responsive").shouldHave(text(studentBirthDay + " " + studentBirthMonth + "," + studentBirthYear));
-        $(".table-responsive").shouldHave(text(studentSubject));
-        $(".table-responsive").shouldHave(text(studentHobby));
-        $(".table-responsive").shouldHave(text(studentPicture));
-        $(".table-responsive").shouldHave(text(studentAddress));
-        $(".table-responsive").shouldHave(text(studentState + " " + studentCity));
+        registrationPage
+                .openPage()
+                .typeFirstName(studentFirstName)
+                .typeLastName(studentLastName)
+                .typeEmail(studentEmail)
+                .setGender(studentGender)
+                .typePhoneNumber(studentPhone)
+                .setDateOfBirth(studentBirthDay, studentBirthMonth, studentBirthYear)
+                .typeSubject(studentSubject)
+                .setHobby(studentHobby)
+                .uploadPicture(studentPicture)
+                .typeCurrentAddress(studentAddress)
+                .setStateAndCity(studentState, studentCity)
+                .submit()
+                .checkRegistrationResult()
+                .checkResult("Student Name", studentFirstName + " " + studentLastName)
+                .checkResult("Student Email", studentEmail)
+                .checkResult("Gender", studentGender)
+                .checkResult("Mobile", studentPhone)
+                .checkResult("Date of Birth",
+                        studentBirthDay + " " + studentBirthMonth + "," + studentBirthYear)
+                .checkResult("Subjects", studentSubject)
+                .checkResult("Hobbies", studentHobby)
+                .checkResult("Picture", studentPicture)
+                .checkResult("Address", studentAddress)
+                .checkResult("State and City", studentState + " " + studentCity);
     }
 
     @Test
     void submitFormWithRequiredFieldsOnlyTest() {
-        open("/automation-practice-form");
 
-        $("[id=firstName]").setValue(studentFirstName);
-        $("[id=lastName]").setValue(studentLastName);
-        $("#genterWrapper").$(byText(studentGender)).click();
-        $("[id=userNumber]").setValue(studentPhone);
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").should(appear);
-        $("[id=example-modal-sizes-title-lg]").shouldHave(text("Thanks for submitting the form"));
-
-        $(".table-responsive").shouldHave(text(studentFirstName + " " + studentLastName));
-        $(".table-responsive").shouldHave(text(studentGender));
-        $(".table-responsive").shouldHave(text(studentPhone));
+        registrationPage
+                .openPage()
+                .typeFirstName(studentFirstName)
+                .typeLastName(studentLastName)
+                .setGender(studentGender)
+                .typePhoneNumber(studentPhone)
+                .submit()
+                .checkRegistrationResult()
+                .checkResult("Student Name", studentFirstName + " " + studentLastName)
+                .checkResult("Gender", studentGender)
+                .checkResult("Mobile", studentPhone);
     }
 
     @Test
     void emptyFormNegativeTest() {
-        open("/automation-practice-form");
 
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").shouldNot(exist);
+        registrationPage
+                .openPage()
+                .submit();
     }
 
     @Test
     void missingFirstNameNegativeTest() {
-        open("/automation-practice-form");
 
-        $("#lastName").setValue(studentLastName);
-        $("#genterWrapper").$(byText(studentGender)).click();
-        $("#userNumber").setValue(studentPhone);
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").shouldNot(appear);
+        registrationPage
+                .openPage()
+                .typeLastName(studentLastName)
+                .setGender(studentGender)
+                .typePhoneNumber(studentPhone)
+                .submit();
     }
 
     @Test
     void missingGenderNegativeTest() {
-        open("/automation-practice-form");
 
-        $("#firstName").setValue(studentFirstName);
-        $("#lastName").setValue(studentLastName);
-        $("#userNumber").setValue(studentPhone);
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").shouldNot(appear);
+        registrationPage
+                .openPage()
+                .typeFirstName(studentFirstName)
+                .typeLastName(studentLastName)
+                .typePhoneNumber(studentPhone)
+                .submit();
     }
 
     @Test
     void invalidPhoneNumberNegativeTest() {
-        open("/automation-practice-form");
 
-        $("#firstName").setValue(studentFirstName);
-        $("#lastName").setValue(studentLastName);
-        $("#genterWrapper").$(byText(studentGender)).click();
-        $("#userNumber").setValue(invalidPhone);
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").shouldNot(appear);
+        registrationPage
+                .openPage()
+                .typeFirstName(studentFirstName)
+                .typeLastName(studentLastName)
+                .setGender(studentGender)
+                .typePhoneNumber(invalidPhone)
+                .submit();
     }
 
     @Test
     void invalidEmailNegativeTest() {
-        open("/automation-practice-form");
 
-        $("#userEmail").setValue(invalidEmail);
-
-        $("#submit").scrollIntoView(true);
-        executeJavaScript("arguments[0].click();", $("#submit"));
-
-        $(".modal-content").shouldNot(exist);
+        registrationPage
+                .openPage()
+                .typeEmail(invalidEmail)
+                .submit();
     }
 }
