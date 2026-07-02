@@ -37,10 +37,9 @@ public class RegistrationPage {
         $(".practice-form-wrapper")
                 .shouldHave(text("Student Registration Form"));
 
-        removeBanners();
-
         return this;
     }
+
     public RegistrationPage removeBanners() {
         executeJavaScript("document.getElementById('fixedban')?.remove();");
         executeJavaScript("document.querySelector('footer')?.remove();");
